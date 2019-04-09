@@ -103,7 +103,8 @@ if (class_exists('\Walker_Nav_Menu')) {
                 $output .= $indent . '<h6 class="dropdown-header">' . esc_attr($item->title);
             } else {
                 $class_names = $value = '';
-                $classes = empty($item->classes) ? array() : (array) $item->classes;
+                $item_classes = empty($item->classes) ? array() : (array) $item->classes;
+                $classes = array();
 
                 $atts = array();
                 $atts['title']  = ! empty($item->title)	? $item->title	: '';
@@ -112,10 +113,14 @@ if (class_exists('\Walker_Nav_Menu')) {
                 $atts['href'] = ! empty($item->url) ? $item->url : '';
                 $id = apply_filters('nav_menu_item_id', 'menu-item-'. $item->ID, $item, $args);
 
-                if (in_array('current-menu-item', $classes)) {
-                    $classes[] = ' active';
+                if (in_array('current-menu-item', $item_classes)) {
+                    $classes[] = 'active';
                 }
-                if ($depth === 0) {
+                
+                if ($depth === 0) {                
+                    if ( $args->li_class ) {
+                        $classes[] = $args->li_class;
+                    }
                     $classes[] = 'nav-item';
                     $classes[] = 'nav-item-' . $item->ID;
                     $atts['class']			= 'nav-link';
